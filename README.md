@@ -1,3 +1,3 @@
 # YoutubeBlazorApp
 BLazor Priview 8 Client App CRUD  and Web API
-![](images/image.png)
+![](YoutubeBlazor/Client/wwwroot/images/image.png)
