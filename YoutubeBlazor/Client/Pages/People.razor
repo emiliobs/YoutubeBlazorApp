@@ -1,7 +1,7 @@
 ﻿@page "/People"
 
 
-<h1>Demo for Youtube Person Project</h1>
+<h1>Demo Person Project</h1>
 
 
 <table class="table" style="background:#05163D;color:honeydew; width:100%;">
@@ -108,7 +108,7 @@ else
                 <td>@_person.Urd</td>
                 <td>@_person.Visible</td>
                 <td>
-                    <button class="btn btn-info">Edit</button> |
+                    <button class="btn btn-info" @onclick="@(()=>EditPerson(_person.Id))">Edit</button> |
                     <button class="btn btn-danger">Delete</button>
                 </td>
             </tr>
@@ -138,7 +138,26 @@ else
 
     async Task AddPerson()
     {
+        PersonG.Urd = DateTime.Now.ToUniversalTime().ToString();
 
+        if (PersonG.Id == 0)
+        {
+            await Http.PostJsonAsync("/api/People/", PersonG);
+        }
+        else
+        {
+            await Http.PutJsonAsync($"/api/People/{PersonG.Id}", PersonG);
+        }
+
+        PersonG = new Person();
+        Person = await Http.GetJsonAsync<Person[]>("api/people");
+    }
+
+    async Task EditPerson(int id)
+    {
+        ids = id.ToString();
+
+        PersonG = await Http.GetJsonAsync<Person>($"/api/People/{id}");
     }
 
 }
