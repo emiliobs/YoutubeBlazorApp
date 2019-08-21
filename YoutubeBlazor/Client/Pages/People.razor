@@ -109,7 +109,7 @@ else
                 <td>@_person.Visible</td>
                 <td>
                     <button class="btn btn-info" @onclick="@(()=>EditPerson(_person.Id))">Edit</button> |
-                    <button class="btn btn-danger">Delete</button>
+                    <button class="btn btn-danger" @onclick="@(() => DeletePerson(_person.Id))">Delete</button>
                 </td>
             </tr>
             }
@@ -130,7 +130,7 @@ else
         Person = await Http.GetJsonAsync<Person[]>("/api/People/");
     }
 
-    async Task AddNewPerson()
+    async Task  AddNewPerson()
     {
         PersonG = new Person();
 
@@ -158,6 +158,24 @@ else
         ids = id.ToString();
 
         PersonG = await Http.GetJsonAsync<Person>($"/api/People/{id}");
+    }
+
+    async Task DeletePerson(int id)
+    {
+       
+        var SelectPerson = $"Would you like delete this {Person.First(p => p.Id == id).Name} ?  ";
+          
+        ids = id.ToString();
+
+        if (await JS.InvokeAsync<bool>("confirm", SelectPerson))
+        {
+
+          await Http.DeleteAsync($"/api/People/{id}");
+
+        }
+
+
+        Person = await Http.GetJsonAsync<Person[]>("/api/People/");
     }
 
 }
